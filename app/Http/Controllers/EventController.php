@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\User;
+use Carbon\Carbon;
 
 
 class EventController extends Controller
@@ -35,10 +36,20 @@ class EventController extends Controller
 
     public function store(Request $request){
 
+
+        $validedData = $request->validate([
+
+            'title' => 'required|string|max:255',
+        'city' => 'required|string|max:255',
+        'description' => 'required|string',
+        'date' => 'required|date',
+
+        ]);
+
         $event = new Event;
 
         $event->title = $request->title;
-        $event->date = $request->date;
+        $event->date = $request->input('date');
         $event->city = $request->city;
         $event->private = $request->private;
         $event->description = $request->description;
@@ -96,4 +107,39 @@ class EventController extends Controller
 
     }
 
-}
+    public function edit($id){
+
+    
+        $event = Event::findOrFail($id);
+    
+        return view('events.edit', ['event' => $event]);    
+    
+    }
+
+    public function update(Request $request, $id)
+    {
+        
+        $data = $request->all();
+
+        /* imagem upload  */
+
+        if($request->hasfile('image') && $request->file('image')->isValid()){
+
+            $requestImage = $request->image;
+
+            $extension = $requestImage->extension();
+
+            $imageName = md5($requestImage->getClientOriginalName() . strtotime("now")) . "." . $extension;
+
+            $requestImage->move(public_path('img/events'), $imageName);
+
+            $data['image'] = $imageName;
+
+        $event = Event::findOrFail($request->id)->update($data);
+       
+        return redirect('/dashboard')->with('msg', 'Evento editado com sucesso!');
+
+        }
+
+    }
+} 
