@@ -44,6 +44,7 @@ header {
 
 /* navbar */
 .navbar img {
+    margin-left: 10px;
     width: 50px !important;
 }
 
