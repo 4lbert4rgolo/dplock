@@ -42,10 +42,19 @@ header {
     padding: 10px;
 }
 
+#info-container .already-joined-msg{
+    margin: 15px 0;
+    color: #001545;
+    background-color: #cce5ff;
+    border: 1px solid #88daff;
+    padding: 10px;
+    width: 255px;
+}
+
 /* navbar */
 .navbar img {
     margin-left: 10px;
-    width: 50px !important;
+    width: 50px;
 }
 
 #navbar {
